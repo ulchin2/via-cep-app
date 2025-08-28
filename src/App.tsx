@@ -1,83 +1,112 @@
 import { useState } from "react";
+import {
+  Container,
+  Typography,
+  CircularProgress,
+  Alert,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Grid } from "@mui/material";
 import CepSearch from "./components/CepSearch";
 import CepResult from "./components/CepResult";
-import { getAddressByCep } from "./services/viacep";
+import CepHistory from "./components/CepHistory";
+import CepDetailModal from "./components/CepDetailModal";
 import type { ViaCep } from "./types/viacep";
 
-export default function App() {
+export default function CepPage() {
   const [data, setData] = useState<ViaCep | null>(null);
   const [history, setHistory] = useState<ViaCep[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<String | null>(null);
-  const [filter, setFilter] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = async (cep: string) => {
-    setLoading(true);
-    setError(null);
-    setData(null);
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+
+  async function handleSearch(cep: string) {
+    const cleanCep = cep.replace(/\D/g, "");
+
+    if (cleanCep.length !== 8) {
+      setError("O CEP deve ter 8 dígitos.");
+      setData(null);
+      return;
+    }
 
     try {
-      const result = await getAddressByCep(cep);
-      if (!result) {
-        setError("Cep não encontrado ou inválido.");
-      } else {
-        setData(result);
-        setHistory((prev) => [result, ...prev.filter((h) => h.cep !== result.cep)]);
-      }
-    } catch {
-      setError("Erro ao consultar a API.");
-    } finally {
-      setLoading(false);
-    }
-  };
+      setError(null);
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cleanCep}/json/`
+      );
+      const result: ViaCep = await response.json();
 
-  const filteredHistory = history.filter((item) =>
-    item.cep.includes(filter) ||
-    item.logradouro.toLowerCase().includes(filter.toLowerCase()) ||
-    item.localidade.toLowerCase().includes(filter.toLowerCase())
-  );
+      if ("erro" in result) {
+        setError("CEP não encontrado.");
+        setData(null);
+        return;
+      }
+
+      setData(result);
+      setHistory((prev) => {
+        const exists = prev.some((item) => item.cep === result.cep);
+        if (exists) return prev;
+        return [result, ...prev];
+      });
+    } catch {
+      setError("Não foi possível buscar o CEP. Verifique sua conexão.");
+      setData(null);
+    }
+  }
 
   return (
-    <div style={{ maxWidth: 720, margin: "40px auto", padding: "0 16px" }}>
-      <h1>Consulta CEP (ViaCEP)</h1>
-      <p style={{ color: "#666", marginBottom: 16 }}>
-        Digite um CEP e clique em “Buscar”.
-      </p>
+    <Container
+      maxWidth="md"
+      sx={{
+        py: 4,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: isDesktop ? "center" : "flex-start",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <Typography variant="h4" gutterBottom align="center">
+        Consulta de CEP
+      </Typography>
 
-      <CepSearch onSearch={handleSearch} />
+      <Grid container spacing={3} sx={{ width: "100%" }}>
+        <Grid item xs={12}>
+          <CepSearch onSearch={handleSearch} />
+        </Grid>
 
-      {loading && <p> 🔄 Carregando...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {!loading && !error && <CepResult data={data} />}
+        {error && (
+          <Grid item xs={12}>
+            <Alert severity="error">{error}</Alert>
+          </Grid>
+        )}
 
-      {history.length > 0 && (
-        <div style={{ marginTop: 32 }}>
-          <h2>Histórico</h2>
-          <input
-            type="text"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            placeholder="Filtrar histórico..."
-            style={{ marginBottom: 12, padding: 6, width: "100%" }}
+        <Grid item xs={12}>
+          <CepResult data={data} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <CepHistory
+            history={history}
+            onSelect={(cep) => {
+              setData(cep);
+              setModalOpen(true);
+            }}
+            onDelete={(cep) =>
+              setHistory(history.filter((item) => item.cep !== cep))
+            }
           />
+        </Grid>
+      </Grid>
 
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {filteredHistory.map((item) => (
-              <li
-                key={item.cep}
-                style={{
-                  padding: "8px 12px",
-                  borderBottom: "1px solid #ddd",
-                  cursor: "pointer",
-                }}
-                onClick={() => setData(item)}
-              >
-                {item.cep} — {item.logradouro || "Sem logradouro"}, {item.localidade}/{item.uf}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+      <CepDetailModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        data={data}
+      />
+    </Container>
   );
 }

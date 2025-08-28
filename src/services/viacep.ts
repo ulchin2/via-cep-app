@@ -1,7 +1,7 @@
 import type { ViaCep } from "../types/viacep";
 
 export async function getAddressByCep(rawCep: string): Promise<ViaCep | null> {
-  const cep = rawCep.replace(/\D/g, ""); // mantém só números
+  const cep = rawCep.replace(/\D/g, ""); 
   if (!cep) return null;
 
   const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
