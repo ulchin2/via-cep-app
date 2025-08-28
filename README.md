@@ -59,7 +59,7 @@ src/
  │   ├─ CepHistory.tsx       # Histórico de buscas
  │   └─ CepDetailModal.tsx   # Modal com detalhes e downloads
  ├─ types/
- │   └─ viacep.d.ts          # Tipagem ViaCEP
+ │   └─ viacep.ts          # Tipagem ViaCEP
  └─ App.tsx                  # Componente principal
 ```
 
