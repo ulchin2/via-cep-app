@@ -93,7 +93,8 @@ yarn dev
 4. Abra no navegador:
 
 ```
-http://localhost:5173 //ou na porta informada pelo console
+http://localhost:5173 
+*ou na porta informada pelo console*
 ```
 
 ---
