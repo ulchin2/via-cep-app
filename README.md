@@ -1,69 +1,119 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Via CEP App
 
-Currently, two official plugins are available:
+Um aplicativo React moderno para consultar CEPs brasileiros, exibir resultados detalhados e gerenciar histórico de buscas, com download em TXT e PDF.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🎯 Funcionalidades
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🔍 Consulta de CEP via API [ViaCEP](https://viacep.com.br/)
+- 📋 Exibição completa do endereço:
+  - Logradouro, Bairro, Cidade, UF
+  - DDD, IBGE, SIAFI, GIA
+- 📜 Histórico de CEPs pesquisados:
+  - Filtro por CEP, logradouro ou cidade
+  - Paginação
+  - Botões de **download (TXT/PDF)** e **exclusão**
+- 💾 Download do resultado da busca em **TXT** ou **PDF**
+- 📱 Layout responsivo: desktop e mobile
+- ⚠️ Validação de CEP digitado
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 💻 Screenshots / GIFs
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Tela de busca e resultado
+
+![Tela de busca](./assets/screenshot-search.png)
+
+### Histórico com botões de download e exclusão
+
+![Histórico](./assets/screenshot-history.png)
+
+### Modal de detalhes com download TXT/PDF
+
+![Modal detalhe](./assets/screenshot-modal.png)
+
+*(Você pode gravar um GIF mostrando a busca, modal abrindo e download funcionando para ficar mais interativo.)*
+
+---
+
+## 🛠 Tecnologias
+
+- React 18 + TypeScript
+- Material-UI (MUI) para componentes e layout
+- jsPDF para geração de PDFs
+- CSS-in-JS (`sx` do MUI) para responsividade
+
+---
+
+## 🗂 Estrutura do projeto
+
+```
+src/
+ ├─ components/
+ │   ├─ CepSearch.tsx        # Componente de busca de CEP
+ │   ├─ CepResult.tsx        # Resultado detalhado do CEP
+ │   ├─ CepHistory.tsx       # Histórico de buscas
+ │   └─ CepDetailModal.tsx   # Modal com detalhes e downloads
+ ├─ types/
+ │   └─ viacep.d.ts          # Tipagem ViaCEP
+ └─ App.tsx                  # Componente principal
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Como rodar
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/ulchin2/via-cep-app.git
+cd via-cep-app
 ```
+
+2. Instale dependências:
+
+```bash
+npm install
+# ou
+yarn install
+```
+
+3. Inicie o servidor de desenvolvimento:
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+4. Abra no navegador:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🎨 Como usar
+
+1. Digite o CEP (ex: `01001-000` ou `01001000`) e clique em **Buscar**.
+2. Veja o resultado detalhado no painel principal ou abra o **modal**.
+3. Use os **botões de download** no resultado ou no histórico para gerar arquivos TXT ou PDF.
+4. Filtre o histórico ou exclua itens desnecessários.
+
+---
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Abra **issues** ou envie **pull requests**.  
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob [MIT License](LICENSE).
+
+---
