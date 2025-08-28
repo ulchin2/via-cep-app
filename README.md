@@ -25,17 +25,17 @@ Um aplicativo React moderno para consultar CEPs brasileiros, exibir resultados d
 
 ### Tela de busca e resultado
 
-![Tela de busca](./assets/screenshot-search.png)
+![Tela de busca](./assets/TelaInicial.gif)
 
 ### Histórico com botões de download e exclusão
 
-![Histórico](./assets/screenshot-history.png)
+![Histórico](./assets/Historico.gif)
 
 ### Modal de detalhes com download TXT/PDF
 
-![Modal detalhe](./assets/screenshot-modal.png)
+![Modal detalhe](./assets/Historicodetalhar.gif)
 
-*(Você pode gravar um GIF mostrando a busca, modal abrindo e download funcionando para ficar mais interativo.)*
+
 
 ---
 
