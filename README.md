@@ -45,6 +45,7 @@ Um aplicativo React moderno para consultar CEPs brasileiros, exibir resultados d
 - Material-UI (MUI) para componentes e layout
 - jsPDF para geração de PDFs
 - CSS-in-JS (`sx` do MUI) para responsividade
+- Vite
 
 ---
 
